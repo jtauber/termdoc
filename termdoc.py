@@ -3,29 +3,29 @@ import collections
 
 class LemmaCounts:
     def __init__(self):
-        self.all = collections.Counter()
-        self.by_author = collections.defaultdict(collections.Counter)
-        self.by_work = collections.defaultdict(collections.Counter)
+        self.counters = []
+
+    def get_or_create_counter(self, depth):
+        while depth > len(self.counters) - 1:
+            self.counters.append(collections.defaultdict(collections.Counter))
+        return self.counters[depth]
+
+    def increment_count(self, address, lemma, count):
+        while True:
+            depth = len(address)
+            self.get_or_create_counter(depth)[address][lemma] += count
+            if depth == 0:
+                break
+            address = address[:-1]
 
     def load(self, filename):
         with open(filename) as f:
             for line in f:
-                work_id, lemma, count = line.strip().split("\t")
-                author_id, _ = work_id.split(".")
-                count = int(count)
-                self.all[lemma] += count
-                self.by_author[author_id][lemma] += count
-                self.by_work[work_id][lemma] += count
+                address_string, lemma, count_string = line.strip().split("\t")
+                address = tuple(address_string.split("."))
+                count = int(count_string)
+                self.increment_count(address, lemma, count)
 
-    def get_counts(self, prefix=None):
-        """
-        no prefix returns a Counter of all lemmas
-        author prefix like `0540` will return Counter of lemmas in that author
-        work prefix like `0540:001` will return Counter of lemmas in that work
-        """
-        if prefix is None:
-            return self.all
-        elif "." not in prefix:
-            return self.by_author.get(prefix, collections.Counter())
-        else:
-            return self.by_work.get(prefix, collections.Counter())
+    def get_counts(self, prefix=()):
+        depth = len(prefix)
+        return self.counters[depth][prefix]
