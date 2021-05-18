@@ -10,8 +10,8 @@ class LemmaCounts:
     def load(self, filename):
         with open(filename) as f:
             for line in f:
-                work_id, lemma, count = line.strip().split()
-                author_id, _ = work_id.split(":")
+                work_id, lemma, count = line.strip().split("\t")
+                author_id, _ = work_id.split(".")
                 count = int(count)
                 self.all[lemma] += count
                 self.by_author[author_id][lemma] += count
