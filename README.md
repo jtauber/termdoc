@@ -67,6 +67,6 @@ where the file looks something like:
 2.1	foo	1
 ```
 
-with a period-separated address, term, and count all separated with tabs.
+with a period-separated hierarchical document ID, term, and count all separated with tabs.
 
 Both the period and tab are just defaults and can be override by padding `address_sep` and/or `field_sep` to `load`.
