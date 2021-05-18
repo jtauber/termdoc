@@ -10,10 +10,10 @@ class HierarchicalCounter:
             self.counters.append(collections.defaultdict(collections.Counter))
         return self.counters[depth]
 
-    def increment_count(self, address, lemma, count):
+    def increment_count(self, address, term, count):
         while True:
             depth = len(address)
-            self.get_or_create_counter(depth)[address][lemma] += count
+            self.get_or_create_counter(depth)[address][term] += count
             if depth == 0:
                 break
             address = address[:-1]
@@ -21,10 +21,10 @@ class HierarchicalCounter:
     def load(self, filename, field_sep="\t", address_sep="."):
         with open(filename) as f:
             for line in f:
-                address_string, lemma, count_string = line.strip().split(field_sep)
+                address_string, term, count_string = line.strip().split(field_sep)
                 address = tuple(address_string.split(address_sep))
                 count = int(count_string)
-                self.increment_count(address, lemma, count)
+                self.increment_count(address, term, count)
 
     def get_counts(self, prefix=()):
         depth = len(prefix)
