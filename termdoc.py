@@ -18,11 +18,11 @@ class LemmaCounts:
                 break
             address = address[:-1]
 
-    def load(self, filename):
+    def load(self, filename, field_sep="\t", address_sep="."):
         with open(filename) as f:
             for line in f:
-                address_string, lemma, count_string = line.strip().split("\t")
-                address = tuple(address_string.split("."))
+                address_string, lemma, count_string = line.strip().split(field_sep)
+                address = tuple(address_string.split(address_sep))
                 count = int(count_string)
                 self.increment_count(address, lemma, count)
 
