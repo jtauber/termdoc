@@ -1,7 +1,7 @@
 import collections
 
 
-class LemmaCounts:
+class HierarchicalCounter:
     def __init__(self):
         self.counters = []
 
