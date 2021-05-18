@@ -25,7 +25,7 @@ class LemmaCounts:
         """
         if prefix is None:
             return self.all
-        elif ":" not in prefix:
+        elif "." not in prefix:
             return self.by_author.get(prefix, collections.Counter())
         else:
             return self.by_work.get(prefix, collections.Counter())
