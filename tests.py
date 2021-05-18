@@ -7,7 +7,34 @@ class Test1(unittest.TestCase):
     def test1(self):
         import termdoc
 
-        c = termdoc.HierarchicalCounter()
+        c = termdoc.HTDM()
+        c.increment_count((1,), "foo", 3)
+        c.increment_count((1,), "bar", 2)
+        c.increment_count((2,), "foo", 2)
+        c.increment_count((2,), "bar", 1)
+        self.assertEqual(c.get_counts()["foo"], 5)
+        self.assertEqual(c.get_counts()["bar"], 3)
+
+    def test2(self):
+        import termdoc
+
+        c = termdoc.HTDM()
+        c.increment_count((1, 1), "foo", 3)
+        c.increment_count((1, 2), "foo", 3)
+        c.increment_count((1, 1), "bar", 2)
+        c.increment_count((1, 2), "bar", 2)
+        c.increment_count((2, 1), "foo", 2)
+        c.increment_count((2, 2), "foo", 2)
+        c.increment_count((2, 1), "bar", 1)
+        c.increment_count((2, 2), "bar", 1)
+        self.assertEqual(c.get_counts()["foo"], 10)
+        self.assertEqual(c.get_counts()["bar"], 6)
+        self.assertEqual(c.get_counts((2,))["foo"], 4)
+
+    def test3(self):
+        import termdoc
+
+        c = termdoc.HTDM()
         c.load("test_data/test1.tsv")
 
         self.assertEqual(c.get_counts()["foo"], 10)

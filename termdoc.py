@@ -1,7 +1,7 @@
 import collections
 
 
-class HierarchicalCounter:
+class HTDM:
     def __init__(self):
         self.counters = []
 
