@@ -40,3 +40,7 @@ class HTDM:
         for document, counter in self.leaves().items():
             for term, count in counter.items():
                 yield document, term, count
+
+    def graft(self, prefix, subtree):
+        for address, term, count in subtree.leaf_entries():
+            self.increment_count(prefix + address, term, count)
