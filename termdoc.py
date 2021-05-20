@@ -36,3 +36,7 @@ class HTDM:
     def leaves(self):
         return self.counters[-1]
 
+    def leaf_entries(self):
+        for document, counter in self.leaves():
+            for term, count in counter:
+                yield document, term, count
