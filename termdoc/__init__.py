@@ -1,1 +1,1 @@
-from .htdm import HTDM
+from .htdm import HTDM  # noqa: F401
