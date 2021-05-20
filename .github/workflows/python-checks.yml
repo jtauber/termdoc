@@ -14,10 +14,14 @@ jobs:
       with:
         python-version: 3.9
     - name: Install pipenv
-      run: pip install pipenv        
+      run: pip install pipenv
     - name: Install dependencies
       run: pipenv install --dev
     - name: Lint
       run: pipenv run ./lint.sh
     - name: Test
       run: pipenv run ./test.sh
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        fail_ci_if_error: true
