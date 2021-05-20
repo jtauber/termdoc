@@ -29,3 +29,6 @@ class HTDM:
     def get_counts(self, prefix=()):
         depth = len(prefix)
         return self.counters[depth][prefix]
+
+    def prune(self, level):
+        self.counters = self.counters[:level]
