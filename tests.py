@@ -84,12 +84,13 @@ class Test1(unittest.TestCase):
         c.increment_count((2,), "foo", 2)
         c.increment_count((2,), "bar", 1)
         self.assertEqual(
-            list(c.leaf_entries()), [
+            list(c.leaf_entries()),
+            [
                 ((1,), "foo", 3),
                 ((1,), "bar", 2),
                 ((2,), "foo", 2),
                 ((2,), "bar", 1),
-            ]
+            ],
         )
 
 
