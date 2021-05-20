@@ -32,3 +32,7 @@ class HTDM:
 
     def prune(self, level):
         self.counters = self.counters[:level]
+
+    def leaves(self):
+        return self.counters[-1]
+
