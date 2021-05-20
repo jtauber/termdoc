@@ -18,6 +18,6 @@ jobs:
     - name: Install dependencies
       run: pipenv install --dev
     - name: Lint
-      run: ./lint.sh
+      run: pipenv run lint.sh
     - name: Test
-      run: ./test.sh
+      run: pipenv run test.sh
