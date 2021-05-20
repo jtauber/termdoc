@@ -59,6 +59,22 @@ class Test1(unittest.TestCase):
         self.assertEqual(c.get_counts(("2", "1"))["bar"], 0)
         self.assertEqual(c.get_counts(("2", "1"))["baz"], 5)
 
+    def test4(self):
+        import termdoc
+
+        c = termdoc.HTDM()
+        c.increment_count((1,), "foo", 3)
+        c.increment_count((1,), "bar", 2)
+        c.increment_count((2,), "foo", 2)
+        c.increment_count((2,), "bar", 1)
+        self.assertEqual(c.get_counts()["foo"], 5)
+        self.assertEqual(c.get_counts()["bar"], 3)
+        self.assertEqual(len(c.counters), 2)
+        c.prune(1)
+        self.assertEqual(c.get_counts()["foo"], 5)
+        self.assertEqual(c.get_counts()["bar"], 3)
+        self.assertEqual(len(c.counters), 1)
+
 
 if __name__ == "__main__":
     unittest.main()
