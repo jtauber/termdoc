@@ -59,7 +59,6 @@ class Test1(unittest.TestCase):
         self.assertEqual(c.get_counts(("2", "1"))["bar"], 0)
         self.assertEqual(c.get_counts(("2", "1"))["baz"], 5)
 
-
     def test4(self):
         import termdoc
 
@@ -75,7 +74,6 @@ class Test1(unittest.TestCase):
         self.assertEqual(c.get_counts()["foo"], 5)
         self.assertEqual(c.get_counts()["bar"], 3)
         self.assertEqual(len(c.counters), 1)
-
 
 
 if __name__ == "__main__":
