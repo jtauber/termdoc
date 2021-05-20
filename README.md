@@ -2,15 +2,21 @@
 
 *Python library and tools for working with term-document matrices*
 
-This project is just beginning, but a useful data structure, HTDM, is already available.
+This project is just beginning, but a useful data structure, HTDM (hierarchical term-document matrix), is already available.
 
 Various calculations on TDMs will soon be implemented, including TF-IDF.
 
 I am also interested in standardizing the exchange format for HTDMs.
 
+## Installation
+
+```
+pip install termdoc
+```
+
 ## HTDM
 
-The core data structure is a term-document matrix supporting hierarchical documents. Documents labelled with a tuple such as `(1, 7, 5)` or `("Plato", "Republic", "Book 5")` (the type of each item in the tuple does not matter). Counts are aggregated at each level of the hierarchy (including at the top level to get totals across all documents).
+The core data structure is a term-document matrix supporting hierarchical documents. Documents are labelled with a tuple such as `(1, 7, 5)` or `("Plato", "Republic", "Book 5")` (the type of each item in the tuple does not matter). Counts are aggregated at each level of the hierarchy (including at the top level to get totals across all documents).
 
 Here is an example with a single-level of documents (a traditional TDM):
 
@@ -70,3 +76,5 @@ where the file looks something like:
 with a period-separated hierarchical document ID, term, and count all separated with tabs.
 
 Both the period and tab are just defaults and can be override by padding `address_sep` and/or `field_sep` to `load`.
+
+You can prune a HTDM to just `n` levels with the method `prune(n)`.
