@@ -139,3 +139,18 @@ or to raise an exception:
 ```
 
 Note that duplicates are only checked in the leaves of the document tree.
+
+### DelimitedAddressFormatter
+
+As a helper, if you define:
+
+```python
+doc = termdoc.DelimitedAddressFormatter(".")
+```
+
+then `doc("1.2.3")` will act the same as `("1", "2", "3")`
+
+It is conceived that other classes could be written to the same interface as `DelimitedAddressFormatter` if you are working with richer hierarchical document IDs that need translation to tuples.
+
+Note: this might be more trouble than it worth so I may get rid of this if no one finds it useful and is happy to just work with tuples directly all the time.
+
