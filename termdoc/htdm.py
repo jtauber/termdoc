@@ -32,3 +32,15 @@ class HTDM:
 
     def prune(self, level):
         self.counters = self.counters[:level]
+
+    def leaves(self):
+        return self.counters[-1]
+
+    def leaf_entries(self):
+        for document, counter in self.leaves().items():
+            for term, count in counter.items():
+                yield document, term, count
+
+    def graft(self, prefix, subtree):
+        for address, term, count in subtree.leaf_entries():
+            self.increment_count(prefix + address, term, count)

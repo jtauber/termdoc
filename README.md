@@ -77,4 +77,10 @@ with a period-separated hierarchical document ID, term, and count all separated 
 
 Both the period and tab are just defaults and can be override by padding `address_sep` and/or `field_sep` to `load`.
 
-You can prune a HTDM to just `n` levels with the method `prune(n)`.
+You can **prune** a HTDM to just `n` levels with the method `prune(n)`.
+
+## Unreleased Features
+
+You can iterate over the document-term counts at the leaves of the HDTM with the method `leaf_entries()` (this returns a generator yielding `(document_address, term, count)` tuples). This is effectively a traditional TDM (the document IDs will still reflect the hierarchy but the aggregate counts aren't present).
+
+You can **graft** one HTDM under another by using the `graft(prefix, subtree)` method, specifying as `prefix` the document address you want to add the subtree under. This is useful if you have an HTDM for, say, a single work by an author, with chapters as documents and you want to incorporate that into a higher-level HTDM of multiple works by the author, or a collection of works by different authors.
