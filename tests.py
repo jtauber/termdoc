@@ -169,5 +169,69 @@ class TestDuplicates(unittest.TestCase):
         self.assertEqual(c.get_counts((2,))["foo"], 4)
 
 
+class TestAddressFormatters(unittest.TestCase):
+    def test_delimited_addresses(self):
+        import termdoc
+
+        doc = termdoc.DelimitedAddressFormatter(".")
+        a = doc("1.2.3")
+        b = doc(("1", "2", "3"))
+        self.assertEqual(a.as_string, "1.2.3")
+        self.assertEqual(a.as_tuple, ("1", "2", "3"))
+        self.assertEqual(b.as_string, "1.2.3")
+        self.assertEqual(b.as_tuple, ("1", "2", "3"))
+
+    def test_bad_address(self):
+        import termdoc
+
+        doc = termdoc.DelimitedAddressFormatter(".")
+        self.assertRaises(ValueError, doc, 1000)
+
+    def test_usage(self):
+        import termdoc
+
+        doc = termdoc.DelimitedAddressFormatter(".")
+
+        c = termdoc.HTDM()
+        c.increment_count(doc("1.1"), "foo", 3)
+        c.increment_count(doc("1.2"), "foo", 3)
+        c.increment_count(doc("1.1"), "bar", 2)
+        c.increment_count(doc("1.2"), "bar", 2)
+        c.increment_count(doc("2.1"), "foo", 2)
+        c.increment_count(doc("2.2"), "foo", 2)
+        c.increment_count(doc("2.1"), "bar", 1)
+        c.increment_count(doc("2.2"), "bar", 1)
+        self.assertEqual(c.get_counts(doc())["foo"], 10)
+        self.assertEqual(c.get_counts(doc())["bar"], 6)
+        self.assertEqual(c.get_counts(doc("2"))["foo"], 4)
+        self.assertEqual(c.get_counts(doc("2.1"))["foo"], 2)
+
+    def test_graft(self):
+        import termdoc
+
+        doc = termdoc.DelimitedAddressFormatter(".")
+
+        c1 = termdoc.HTDM()
+        c1.increment_count(doc("1"), "foo", 3)
+        c1.increment_count(doc("1"), "bar", 2)
+        c1.increment_count(doc("2"), "foo", 2)
+        c1.increment_count(doc("2"), "bar", 1)
+        c2 = termdoc.HTDM()
+        c2.increment_count(doc("4.1"), "foo", 5)
+        c2.increment_count(doc("5.3"), "foo", 6)
+        c2.graft(doc("5"), c1)
+        self.assertEqual(
+            list(c2.leaf_entries()),
+            [
+                (("4", "1"), "foo", 5),
+                (("5", "3"), "foo", 6),
+                (("5", "1"), "foo", 3),
+                (("5", "1"), "bar", 2),
+                (("5", "2"), "foo", 2),
+                (("5", "2"), "bar", 1),
+            ],
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

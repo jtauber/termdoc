@@ -1,4 +1,5 @@
 import collections
+from dataclasses import dataclass
 from enum import Enum, auto
 
 
@@ -6,6 +7,30 @@ class Duplicates(Enum):
     ALLOW = auto()
     IGNORE = auto()
     ERROR = auto()
+
+
+@dataclass
+class Address:
+    as_string: str
+    as_tuple: tuple
+
+
+class DelimitedAddressFormatter:
+    def __init__(self, delimiter):
+        self.delimiter = delimiter
+
+    def __call__(self, address=()):
+        if isinstance(address, str):
+            return Address(
+                as_string=address, as_tuple=tuple(address.split(self.delimiter))
+            )
+        elif isinstance(address, tuple):
+            return Address(
+                as_string=self.delimiter.join(map(str, address)),
+                as_tuple=tuple(map(str, address)),
+            )
+        else:
+            raise ValueError
 
 
 class HTDM:
@@ -20,6 +45,8 @@ class HTDM:
 
     def increment_count(self, address, term, count):
         first = True
+        if isinstance(address, Address):
+            address = address.as_tuple
         while True:
             depth = len(address)
             counter = self.get_or_create_counter(depth)[address]
@@ -43,6 +70,8 @@ class HTDM:
                 self.increment_count(address, term, count)
 
     def get_counts(self, prefix=()):
+        if isinstance(prefix, Address):
+            prefix = prefix.as_tuple
         depth = len(prefix)
         return self.counters[depth][prefix]
 
@@ -58,5 +87,7 @@ class HTDM:
                 yield document, term, count
 
     def graft(self, prefix, subtree):
+        if isinstance(prefix, Address):
+            prefix = prefix.as_tuple
         for address, term, count in subtree.leaf_entries():
             self.increment_count(prefix + address, term, count)

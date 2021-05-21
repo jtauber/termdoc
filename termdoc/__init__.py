@@ -1,1 +1,1 @@
-from .htdm import HTDM, Duplicates  # noqa: F401
+from .htdm import HTDM, DelimitedAddressFormatter, Duplicates  # noqa: F401
