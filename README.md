@@ -16,7 +16,7 @@ pip install termdoc
 
 ## HTDM
 
-The core data structure is a term-document matrix supporting hierarchical documents. Documents are labelled with a tuple such as `(1, 7, 5)` or `("Plato", "Republic", "Book 5")` (the type of each item in the tuple does not matter). Counts are aggregated at each level of the hierarchy (including at the top level to get totals across all documents).
+The core data structure is a term-document matrix supporting hierarchical documents. Documents are labelled with a tuple such as `(1, 7, 5)` or `("Plato", "Republic", "Book 5")` (the type of each item in the tuple does not matter). This hierarchy could represent divisions of a work, grouping of multiple works, or some combination. Counts are aggregated at each level of the hierarchy (including at the top level to get totals across all documents).
 
 HTDMs can be loaded with `load`:
 
@@ -39,9 +39,20 @@ where the file looks something like:
 
 with a period-separated hierarchical document ID, term, and count all separated with tabs.
 
-Both the period and tab are just defaults and can be override by padding `address_sep` and/or `field_sep` to `load`.
+Both the period and tab are just defaults and can be override by passing `address_sep` and/or `field_sep` to `load`.
 
-They can also be built up programmatically.
+The HTDM can then give counts at any level of the document hierarchy:
+
+```python
+>>> c.get_counts()["foo"]
+10
+>>> c.get_counts((1,))["foo"]
+9
+>>> c.get_counts((1,2))["foo"]
+2
+```
+
+HTDMs can also be built up programmatically.
 
 Here is an example with a single-level of documents (a traditional TDM):
 
