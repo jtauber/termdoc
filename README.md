@@ -97,3 +97,45 @@ You can **prune** a HTDM to just `n` levels with the method `prune(n)`.
 You can iterate over the document-term counts at the leaves of the HDTM with the method `leaf_entries()` (this returns a generator yielding `(document_address, term, count)` tuples). This is effectively a traditional TDM (the document IDs will still reflect the hierarchy but the aggregate counts aren't present).
 
 You can **graft** one HTDM under another by using the `graft(prefix, subtree)` method, specifying as `prefix` the document address you want to add the subtree under. This is useful if you have an HTDM for, say, a single work by an author, with chapters as documents and you want to incorporate that into a higher-level HTDM of multiple works by the author, or a collection of works by different authors.
+
+### Duplicates Policy
+
+You can optionall pass in a `duplicates` setting to the constructorr indicating the policy you want to follow if a term-document count is updated more than once.
+
+```python
+>>> c = termdoc.HTDM()
+>>> c.increment_count((), "foo", 3)
+>>> c.increment_count((), "foo", 2)
+>>> c.get_counts()["foo"]
+5
+```
+
+is the same as
+
+```python
+>>> c = termdoc.HTDM(duplicates=termdoc.Duplicates.ALLOW)
+>>> c.increment_count((), "foo", 3)
+>>> c.increment_count((), "foo", 2)
+>>> c.get_counts()["foo"]
+5
+```
+
+But you can tell an HTDM to ignore attempts to update an existing count:
+
+```python
+>>> c = termdoc.HTDM(duplicates=termdoc.Duplicates.IGNORE)
+>>> c.increment_count((), "foo", 3)
+>>> c.increment_count((), "foo", 2)
+>>> c.get_counts()["foo"]
+3
+```
+
+or to raise an exception:
+
+```python
+>>> c = termdoc.HTDM(duplicates=termdoc.Duplicates.ERROR)
+>>> c.increment_count((), "foo", 3)
+>>> c.increment_count((), "foo", 2)  # this will raise a ValueError
+```
+
+Note that duplicates are only checked in the leaves of the document tree.
