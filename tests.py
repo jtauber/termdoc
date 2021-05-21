@@ -118,5 +118,56 @@ class Test1(unittest.TestCase):
         )
 
 
+class TestDuplicates(unittest.TestCase):
+    def test_allow(self):
+        import termdoc
+
+        c = termdoc.HTDM()
+        c.increment_count((), "foo", 3)
+        c.increment_count((), "foo", 2)
+        self.assertEqual(c.get_counts()["foo"], 5)
+
+    def test_explicit_allow(self):
+        import termdoc
+
+        c = termdoc.HTDM(duplicates=termdoc.Duplicates.ALLOW)
+        c.increment_count((), "foo", 3)
+        c.increment_count((), "foo", 2)
+        self.assertEqual(c.get_counts()["foo"], 5)
+
+    def test_ignore(self):
+        import termdoc
+
+        c = termdoc.HTDM(duplicates=termdoc.Duplicates.IGNORE)
+        c.increment_count((), "foo", 3)
+        c.increment_count((), "foo", 2)
+        self.assertEqual(c.get_counts()["foo"], 3)
+
+    def test_error(self):
+        import termdoc
+
+        c = termdoc.HTDM(duplicates=termdoc.Duplicates.ERROR)
+        c.increment_count((), "foo", 3)
+        self.assertRaises(ValueError, c.increment_count, (), "foo", 2)
+        self.assertEqual(c.get_counts()["foo"], 3)
+
+    def test_multi_level_error(self):
+        import termdoc
+
+        # this test makes sure the `if first` is working in `increment_count`
+        c = termdoc.HTDM(duplicates=termdoc.Duplicates.ERROR)
+        c.increment_count((1, 1), "foo", 3)
+        c.increment_count((1, 2), "foo", 3)
+        c.increment_count((1, 1), "bar", 2)
+        c.increment_count((1, 2), "bar", 2)
+        c.increment_count((2, 1), "foo", 2)
+        c.increment_count((2, 2), "foo", 2)
+        c.increment_count((2, 1), "bar", 1)
+        c.increment_count((2, 2), "bar", 1)
+        self.assertEqual(c.get_counts()["foo"], 10)
+        self.assertEqual(c.get_counts()["bar"], 6)
+        self.assertEqual(c.get_counts((2,))["foo"], 4)
+
+
 if __name__ == "__main__":
     unittest.main()

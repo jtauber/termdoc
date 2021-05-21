@@ -1,1 +1,1 @@
-from .htdm import HTDM  # noqa: F401
+from .htdm import HTDM, Duplicates  # noqa: F401

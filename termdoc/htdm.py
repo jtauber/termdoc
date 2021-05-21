@@ -1,9 +1,17 @@
 import collections
+from enum import Enum, auto
+
+
+class Duplicates(Enum):
+    ALLOW = auto()
+    IGNORE = auto()
+    ERROR = auto()
 
 
 class HTDM:
-    def __init__(self):
+    def __init__(self, duplicates=Duplicates.ALLOW):
         self.counters = []
+        self.duplicates = duplicates
 
     def get_or_create_counter(self, depth):
         while depth > len(self.counters) - 1:
@@ -11,12 +19,20 @@ class HTDM:
         return self.counters[depth]
 
     def increment_count(self, address, term, count):
+        first = True
         while True:
             depth = len(address)
-            self.get_or_create_counter(depth)[address][term] += count
+            counter = self.get_or_create_counter(depth)[address]
+            if first and term in counter:
+                if self.duplicates == Duplicates.IGNORE:
+                    return
+                elif self.duplicates == Duplicates.ERROR:
+                    raise ValueError(f"{term} already in {address}")
+            counter[term] += count
             if depth == 0:
                 break
             address = address[:-1]
+            first = False
 
     def load(self, filename, field_sep="\t", address_sep="."):
         with open(filename) as f:
