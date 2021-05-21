@@ -4,7 +4,7 @@ import unittest
 
 
 class Test1(unittest.TestCase):
-    def test1(self):
+    def test_single_level(self):
         import termdoc
 
         c = termdoc.HTDM()
@@ -15,7 +15,7 @@ class Test1(unittest.TestCase):
         self.assertEqual(c.get_counts()["foo"], 5)
         self.assertEqual(c.get_counts()["bar"], 3)
 
-    def test2(self):
+    def test_multi_level(self):
         import termdoc
 
         c = termdoc.HTDM()
@@ -31,7 +31,7 @@ class Test1(unittest.TestCase):
         self.assertEqual(c.get_counts()["bar"], 6)
         self.assertEqual(c.get_counts((2,))["foo"], 4)
 
-    def test3(self):
+    def test_load(self):
         import termdoc
 
         c = termdoc.HTDM()
@@ -59,7 +59,7 @@ class Test1(unittest.TestCase):
         self.assertEqual(c.get_counts(("2", "1"))["bar"], 0)
         self.assertEqual(c.get_counts(("2", "1"))["baz"], 5)
 
-    def test4(self):
+    def test_prune(self):
         import termdoc
 
         c = termdoc.HTDM()
@@ -75,7 +75,7 @@ class Test1(unittest.TestCase):
         self.assertEqual(c.get_counts()["bar"], 3)
         self.assertEqual(len(c.counters), 1)
 
-    def test5(self):
+    def test_leaf_entries(self):
         import termdoc
 
         c = termdoc.HTDM()
@@ -93,7 +93,7 @@ class Test1(unittest.TestCase):
             ],
         )
 
-    def test6(self):
+    def test_graft(self):
         import termdoc
 
         c1 = termdoc.HTDM()
