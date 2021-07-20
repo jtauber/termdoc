@@ -64,9 +64,16 @@ class HTDM:
     def load(self, filename, field_sep="\t", address_sep="."):
         with open(filename) as f:
             for line in f:
-                address_string, term, count_string = line.strip().split(field_sep)
+                fields = line.strip().split(field_sep)
+                if len(fields) == 3:
+                    address_string, term, count_string = fields
+                    count = int(count_string)
+                elif len(fields) == 2:
+                    address_string, term = fields
+                    count = 1
+                else:
+                    raise ValueError(f"{fields} should have 2 or 3 fields")
                 address = tuple(address_string.split(address_sep))
-                count = int(count_string)
                 self.increment_count(address, term, count)
 
     def get_counts(self, prefix=()):
