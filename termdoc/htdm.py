@@ -1,5 +1,4 @@
 import collections
-from dataclasses import dataclass
 from enum import Enum, auto
 
 
@@ -9,34 +8,18 @@ class Duplicates(Enum):
     ERROR = auto()
 
 
-@dataclass
-class Address:
-    as_string: str
-    as_tuple: tuple
-
-
-class DelimitedAddressFormatter:
-    def __init__(self, delimiter):
-        self.delimiter = delimiter
-
-    def __call__(self, address=()):
-        if isinstance(address, str):
-            return Address(
-                as_string=address, as_tuple=tuple(address.split(self.delimiter))
-            )
-        elif isinstance(address, tuple):
-            return Address(
-                as_string=self.delimiter.join(map(str, address)),
-                as_tuple=tuple(map(str, address)),
-            )
-        else:
-            raise ValueError
-
-
 class HTDM:
-    def __init__(self, duplicates=Duplicates.ALLOW):
+    def __init__(self, address_sep=".", duplicates=Duplicates.ALLOW):
         self.counters = []
+        self.address_sep = address_sep
         self.duplicates = duplicates
+
+    def depth(self, address):
+        if address:
+            depth = len(address.split(self.address_sep))
+        else:
+            depth = 0
+        return depth
 
     def get_or_create_counter(self, depth):
         while depth > len(self.counters) - 1:
@@ -45,41 +28,37 @@ class HTDM:
 
     def increment_count(self, address, term, count):
         first = True
-        if isinstance(address, Address):
-            address = address.as_tuple
         while True:
-            depth = len(address)
+            depth = self.depth(address)
             counter = self.get_or_create_counter(depth)[address]
             if first and term in counter:
                 if self.duplicates == Duplicates.IGNORE:
                     return
                 elif self.duplicates == Duplicates.ERROR:
-                    raise ValueError(f"{term} already in {address}")
+                    raise ValueError(f"'{term}' already in '{address}'")
             counter[term] += count
             if depth == 0:
                 break
-            address = address[:-1]
+            address = self.address_sep.join(address.split(self.address_sep)[:-1])
             first = False
 
-    def load(self, filename, field_sep="\t", address_sep="."):
+    def load(self, filename, field_sep="\t", address_sep=None):
+        address_sep = address_sep or self.address_sep
         with open(filename) as f:
             for line in f:
                 fields = line.strip().split(field_sep)
                 if len(fields) == 3:
-                    address_string, term, count_string = fields
+                    address, term, count_string = fields
                     count = int(count_string)
                 elif len(fields) == 2:
-                    address_string, term = fields
+                    address, term = fields
                     count = 1
                 else:
                     raise ValueError(f"{fields} should have 2 or 3 fields")
-                address = tuple(address_string.split(address_sep))
                 self.increment_count(address, term, count)
 
-    def get_counts(self, prefix=()):
-        if isinstance(prefix, Address):
-            prefix = prefix.as_tuple
-        depth = len(prefix)
+    def get_counts(self, prefix=""):
+        depth = self.depth(prefix)
         return self.counters[depth][prefix]
 
     def prune(self, level):
@@ -94,7 +73,5 @@ class HTDM:
                 yield document, term, count
 
     def graft(self, prefix, subtree):
-        if isinstance(prefix, Address):
-            prefix = prefix.as_tuple
         for address, term, count in subtree.leaf_entries():
-            self.increment_count(prefix + address, term, count)
+            self.increment_count(prefix + self.address_sep + address, term, count)
