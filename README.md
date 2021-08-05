@@ -104,6 +104,8 @@ You can iterate over the document-term counts at the leaves of the HDTM with the
 
 You can **graft** one HTDM under another by using the `graft(prefix, subtree)` method, specifying as `prefix` the document address you want to add the subtree under. This is useful if you have an HTDM for, say, a single work by an author, with chapters as documents and you want to incorporate that into a higher-level HTDM of multiple works by the author, or a collection of works by different authors.
 
+Alternatively you can provide a `prefix` to `load` to load the file under a particular point in the tree. This effectively prepends the given `prefix` (plus address separator) to the document IDs.
+
 The third (count) field in a loaded file can be omitted if the count is 1 and a document ID + term may be repeated with the counts accumulating.
 
 ### Duplicates Policy
