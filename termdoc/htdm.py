@@ -42,7 +42,7 @@ class HTDM:
             address = self.address_sep.join(address.split(self.address_sep)[:-1])
             first = False
 
-    def load(self, filename, field_sep="\t", address_sep=None):
+    def load(self, filename, field_sep="\t", address_sep=None, prefix=None):
         address_sep = address_sep or self.address_sep
         with open(filename) as f:
             for line in f:
@@ -55,6 +55,8 @@ class HTDM:
                     count = 1
                 else:
                     raise ValueError(f"{fields} should have 2 or 3 fields")
+                if prefix:
+                    address = prefix + address_sep + address
                 self.increment_count(address, term, count)
 
     def get_counts(self, prefix=""):

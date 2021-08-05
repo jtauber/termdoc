@@ -99,6 +99,25 @@ class Test1(unittest.TestCase):
         c = termdoc.HTDM()
         self.assertRaises(ValueError, c.load, "test_data/test4e.tsv")
 
+    def test_load5(self):
+        import termdoc
+
+        c = termdoc.HTDM()
+        c.load("test_data/test2.tsv", prefix="xxx")
+
+        self.assertEqual(c.get_counts()["foo"], 10)
+        self.assertEqual(c.get_counts()["bar"], 5)
+        self.assertEqual(c.get_counts()["baz"], 5)
+        self.assertEqual(c.get_counts("xxx")["foo"], 10)
+        self.assertEqual(c.get_counts("xxx")["bar"], 5)
+        self.assertEqual(c.get_counts("xxx")["baz"], 5)
+        self.assertEqual(c.get_counts("xxx.1")["foo"], 9)
+        self.assertEqual(c.get_counts("xxx.1")["bar"], 5)
+        self.assertEqual(c.get_counts("xxx.1")["baz"], 0)
+        self.assertEqual(c.get_counts("xxx.2")["foo"], 1)
+        self.assertEqual(c.get_counts("xxx.2")["bar"], 0)
+        self.assertEqual(c.get_counts("xxx.2")["baz"], 5)
+
     def test_prune(self):
         import termdoc
 
