@@ -82,3 +82,9 @@ class HTDM:
     def graft(self, prefix, subtree):
         for address, term, count in subtree.leaf_entries():
             self.increment_count(prefix + self.address_sep + address, term, count)
+
+    def copy(self, prefix=None):
+        new = HTDM(address_sep=self.address_sep, duplicates=self.duplicates)
+        for document, term, count in self.leaf_entries(prefix):
+            new.increment_count(document, term, count)
+        return new

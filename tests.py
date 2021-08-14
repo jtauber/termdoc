@@ -198,6 +198,43 @@ class Test1(unittest.TestCase):
             ],
         )
 
+    def test_copy1(self):
+        import termdoc
+
+        c1 = termdoc.HTDM()
+        c1.increment_count("1.1", "foo", 3)
+        c1.increment_count("1.1", "bar", 2)
+        c1.increment_count("1.2", "foo", 2)
+        c1.increment_count("1.2", "bar", 1)
+        c1.increment_count("2.1", "foo", 5)
+        c1.increment_count("2.1", "bar", 1)
+        c1.increment_count("2.2", "foo", 3)
+        c1.increment_count("2.2", "bar", 7)
+
+        c2 = c1.copy()
+        c2.increment_count("1.3", "foo", 2)
+        self.assertEqual(c1.get_counts("1")["foo"], 5)
+        self.assertEqual(c2.get_counts("1")["foo"], 7)
+
+
+    def test_copy2(self):
+        import termdoc
+
+        c1 = termdoc.HTDM()
+        c1.increment_count("1.1", "foo", 3)
+        c1.increment_count("1.1", "bar", 2)
+        c1.increment_count("1.2", "foo", 2)
+        c1.increment_count("1.2", "bar", 1)
+        c1.increment_count("2.1", "foo", 5)
+        c1.increment_count("2.1", "bar", 1)
+        c1.increment_count("2.2", "foo", 3)
+        c1.increment_count("2.2", "bar", 7)
+
+        c2 = c1.copy("1")
+        self.assertEqual(c1.get_counts()["foo"], 13)
+        self.assertEqual(c1.get_counts("1")["foo"], 5)
+        self.assertEqual(c2.get_counts()["foo"], 5)
+
 
 class TestDuplicates(unittest.TestCase):
     def test_allow(self):

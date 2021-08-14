@@ -100,7 +100,7 @@ You can **prune** a HTDM to just `n` levels with the method `prune(n)`.
 
 ## Unreleased Features
 
-You can iterate over the document-term counts at the leaves of the HDTM with the method `leaf_entries()` (this returns a generator yielding `(document_address, term, count)` tuples). This is effectively a traditional TDM (the document IDs will still reflect the hierarchy but the aggregate counts aren't present).
+You can iterate over the document-term counts at the leaves of the HTDM with the method `leaf_entries()` (this returns a generator yielding `(document_address, term, count)` tuples). This is effectively a traditional TDM (the document IDs will still reflect the hierarchy but the aggregate counts aren't present).
 
 You can optionally pass a `prefix` to `leaf_entries()` in each case only that subtree will be returns (with the prefix removed from the document IDs).
 
@@ -109,6 +109,8 @@ You can **graft** one HTDM under another by using the `graft(prefix, subtree)` m
 Alternatively you can provide a `prefix` to `load` to load the file under a particular point in the tree. This effectively prepends the given `prefix` (plus address separator) to the document IDs.
 
 The third (count) field in a loaded file can be omitted if the count is 1 and a document ID + term may be repeated with the counts accumulating.
+
+You can deep copy an HTDM with `copy()`. You can also pass a prefix to `copy()` if you want to clone just a subtree.
 
 ### Duplicates Policy
 
