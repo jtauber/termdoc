@@ -69,10 +69,15 @@ class HTDM:
     def leaves(self):
         return self.counters[-1]
 
-    def leaf_entries(self):
+    def leaf_entries(self, prefix=None):
         for document, counter in self.leaves().items():
-            for term, count in counter.items():
-                yield document, term, count
+            if prefix is None or document.startswith(prefix + self.address_sep):
+                for term, count in counter.items():
+                    if prefix:
+                        subtree_document = document[len(prefix + self.address_sep) :]
+                    else:
+                        subtree_document = document
+                    yield subtree_document, term, count
 
     def graft(self, prefix, subtree):
         for address, term, count in subtree.leaf_entries():

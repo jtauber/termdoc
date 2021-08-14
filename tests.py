@@ -152,6 +152,28 @@ class Test1(unittest.TestCase):
             ],
         )
 
+    def test_leaf_entries_with_prefix(self):
+        import termdoc
+
+        c = termdoc.HTDM()
+        c.increment_count("1.1", "foo", 3)
+        c.increment_count("1.1", "bar", 2)
+        c.increment_count("1.2", "foo", 2)
+        c.increment_count("1.2", "bar", 1)
+        c.increment_count("2.1", "foo", 5)
+        c.increment_count("2.1", "bar", 1)
+        c.increment_count("2.2", "foo", 3)
+        c.increment_count("2.2", "bar", 7)
+        self.assertEqual(
+            list(c.leaf_entries("1")),
+            [
+                ("1", "foo", 3),
+                ("1", "bar", 2),
+                ("2", "foo", 2),
+                ("2", "bar", 1),
+            ],
+        )
+
     def test_graft(self):
         import termdoc
 
