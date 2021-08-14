@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+import os
+import tempfile
 import unittest
 
 
@@ -117,6 +119,42 @@ class Test1(unittest.TestCase):
         self.assertEqual(c.get_counts("xxx.2")["foo"], 1)
         self.assertEqual(c.get_counts("xxx.2")["bar"], 0)
         self.assertEqual(c.get_counts("xxx.2")["baz"], 5)
+
+    def test_save(self):
+        import termdoc
+
+        _, filename = tempfile.mkstemp()
+
+        c1 = termdoc.HTDM()
+        c1.load("test_data/test2.tsv")
+        c1.save(filename)
+
+        c2 = termdoc.HTDM()
+        c2.load(filename)
+
+        os.remove(filename)
+
+        self.assertEqual(c2.get_counts()["foo"], 10)
+        self.assertEqual(c2.get_counts()["bar"], 5)
+        self.assertEqual(c2.get_counts()["baz"], 5)
+        self.assertEqual(c2.get_counts("1")["foo"], 9)
+        self.assertEqual(c2.get_counts("1")["bar"], 5)
+        self.assertEqual(c2.get_counts("1")["baz"], 0)
+        self.assertEqual(c2.get_counts("2")["foo"], 1)
+        self.assertEqual(c2.get_counts("2")["bar"], 0)
+        self.assertEqual(c2.get_counts("2")["baz"], 5)
+        self.assertEqual(c2.get_counts("1.1")["foo"], 7)
+        self.assertEqual(c2.get_counts("1.1")["bar"], 4)
+        self.assertEqual(c2.get_counts("1.1")["baz"], 0)
+        self.assertEqual(c2.get_counts("1.2")["foo"], 2)
+        self.assertEqual(c2.get_counts("1.2")["bar"], 0)
+        self.assertEqual(c2.get_counts("1.2")["baz"], 0)
+        self.assertEqual(c2.get_counts("1.3")["foo"], 0)
+        self.assertEqual(c2.get_counts("1.3")["bar"], 1)
+        self.assertEqual(c2.get_counts("1.3")["baz"], 0)
+        self.assertEqual(c2.get_counts("2.1")["foo"], 1)
+        self.assertEqual(c2.get_counts("2.1")["bar"], 0)
+        self.assertEqual(c2.get_counts("2.1")["baz"], 5)
 
     def test_prune(self):
         import termdoc

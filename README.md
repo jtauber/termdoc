@@ -112,6 +112,8 @@ The third (count) field in a loaded file can be omitted if the count is 1 and a 
 
 You can deep copy an HTDM with `copy()`. You can also pass a prefix to `copy()` if you want to clone just a subtree.
 
+You can save out an HTDM with `save()` which takes a `filename` and optional `field_sep` (defaulting to tab) and `prefix` (if you just want to save out a subtree).
+
 ### Duplicates Policy
 
 You can optionally pass in a `duplicates` setting to the constructorr indicating the policy you want to follow if a term-document count is updated more than once.

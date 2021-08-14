@@ -59,6 +59,11 @@ class HTDM:
                     address = prefix + address_sep + address
                 self.increment_count(address, term, count)
 
+    def save(self, filename, field_sep="\t", prefix=None):
+        with open(filename, "w") as f:
+            for document, term, count in self.leaf_entries(prefix):
+                print(document, term, count, sep=field_sep, file=f)
+
     def get_counts(self, prefix=""):
         depth = self.depth(prefix)
         return self.counters[depth][prefix]
