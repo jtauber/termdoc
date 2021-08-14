@@ -98,8 +98,6 @@ And here is an example with a two-level hierarchy:
 
 You can **prune** a HTDM to just `n` levels with the method `prune(n)`.
 
-## Unreleased Features
-
 You can iterate over the document-term counts at the leaves of the HTDM with the method `leaf_entries()` (this returns a generator yielding `(document_address, term, count)` tuples). This is effectively a traditional TDM (the document IDs will still reflect the hierarchy but the aggregate counts aren't present).
 
 You can optionally pass a `prefix` to `leaf_entries()` in each case only that subtree will be returns (with the prefix removed from the document IDs).
@@ -161,3 +159,4 @@ ValueError: 'foo' already in ''
 ```
 
 Note that duplicates are only checked in the leaves of the document tree.
+
