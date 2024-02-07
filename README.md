@@ -14,6 +14,8 @@ I am also interested in standardizing the exchange format for HTDMs.
 pip install termdoc
 ```
 
+Python 3.10 or higher is required.
+
 ## HTDM
 
 The core data structure is a term-document matrix supporting hierarchical documents. Documents are labelled with a delimited string such as "1.7.5" or "Plato.Republic.5". This hierarchy could represent divisions of a work, grouping of multiple works, or some combination. Counts are aggregated at each level of the hierarchy (including at the top level to get totals across all documents).

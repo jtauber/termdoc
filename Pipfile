@@ -6,10 +6,10 @@ name = "pypi"
 [packages]
 
 [dev-packages]
-black = "==21.5b1"
+black = "*"
 isort = "*"
 flake8 = "*"
 coverage = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.10"
