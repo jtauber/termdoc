@@ -135,7 +135,7 @@ You can save out an HTDM with `save()` which takes a `filename` and optional `fi
 
 ### Duplicates Policy
 
-You can optionally pass in a `duplicates` setting to the constructorr indicating the policy you want to follow if a term-document count is updated more than once.
+You can optionally pass in a `duplicates` setting to the constructor indicating the policy you want to follow if a term-document count is updated more than once.
 
 ```python
 >>> c = termdoc.HTDM()
