@@ -86,7 +86,7 @@ And here is an example with a two-level hierarchy:
 >>> c.increment_count("2.1", "foo", 2)
 >>> c.increment_count("2.2", "foo", 2)
 >>> c.increment_count("2.1", "bar", 1)
->>> c.increment_count("2.2", "bar", 1)
+>>> c.increment_count("2.2", "bar")
 >>> c.get_counts()["foo"]
 10
 >>> c.get_counts()["bar"]
@@ -95,6 +95,8 @@ And here is an example with a two-level hierarchy:
 4
 
 ```
+
+Note that if the `count` is `1` you can omit it.
 
 You can **prune** a HTDM to just `n` levels with the method `prune(n)`.
 

@@ -26,7 +26,7 @@ class HTDM:
             self.counters.append(collections.defaultdict(collections.Counter))
         return self.counters[depth]
 
-    def increment_count(self, address, term, count):
+    def increment_count(self, address, term, count=1):
         first = True
         while True:
             depth = self.depth(address)

@@ -324,5 +324,18 @@ class TestDuplicates(unittest.TestCase):
         self.assertEqual(c.get_counts("2")["foo"], 4)
 
 
+class Test3(unittest.TestCase):
+    def test_two_arg_increment_count(self):
+        import termdoc
+
+        c = termdoc.HTDM()
+        c.increment_count("1", "foo")
+        c.increment_count("1", "bar", 2)
+        c.increment_count("2", "foo", 2)
+        c.increment_count("2", "bar")
+        self.assertEqual(c.get_counts()["foo"], 3)
+        self.assertEqual(c.get_counts()["bar"], 3)
+
+
 if __name__ == "__main__":
     unittest.main()
