@@ -116,7 +116,6 @@ Entire lists of tokens can be added for a particular address in one go using `ad
 
 ```
 
-
 You can **prune** a HTDM to just `n` levels with the method `prune(n)`.
 
 You can iterate over the document-term counts at the leaves of the HTDM with the method `leaf_entries()` (this returns a generator yielding `(document_address, term, count)` tuples). This is effectively a traditional TDM (the document IDs will still reflect the hierarchy but the aggregate counts aren't present).
@@ -132,6 +131,23 @@ The third (count) field in a loaded file can be omitted if the count is 1 and a 
 You can deep copy an HTDM with `copy()`. You can also pass a prefix to `copy()` if you want to clone just a subtree.
 
 You can save out an HTDM with `save()` which takes a `filename` and optional `field_sep` (defaulting to tab) and `prefix` (if you just want to save out a subtree).
+
+### Calculations
+
+You can get a term frequency with `tf(term)` or `tf(term, address)`.
+
+```python
+>>> c = termdoc.HTDM()
+>>> c.increment_count("1", "foo")
+>>> c.increment_count("1", "bar", 3)
+>>> c.increment_count("2", "foo", 3)
+>>> c.increment_count("2", "bar")
+>>> c.tf("foo")
+0.5
+>>> c.tf("foo", "2")
+0.75
+
+```
 
 ### Duplicates Policy
 

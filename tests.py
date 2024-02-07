@@ -347,5 +347,18 @@ class Test3(unittest.TestCase):
         self.assertEqual(c.get_counts("1")["bar"], 2)
 
 
+class Test4(unittest.TestCase):
+    def test_term_frequency(self):
+        import termdoc
+
+        c = termdoc.HTDM()
+        c.increment_count("1", "foo")
+        c.increment_count("1", "bar", 3)
+        c.increment_count("2", "foo", 3)
+        c.increment_count("2", "bar")
+        self.assertEqual(c.tf("foo"), 0.5)
+        self.assertEqual(c.tf("foo", "2"), 0.75)
+
+
 if __name__ == "__main__":
     unittest.main()

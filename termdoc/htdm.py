@@ -97,3 +97,6 @@ class HTDM:
         for document, term, count in self.leaf_entries(prefix):
             new.increment_count(document, term, count)
         return new
+
+    def tf(self, term, address=""):
+        return self.get_counts(address)[term] / self.get_counts(address).total()
