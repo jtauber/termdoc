@@ -336,6 +336,16 @@ class Test3(unittest.TestCase):
         self.assertEqual(c.get_counts()["foo"], 3)
         self.assertEqual(c.get_counts()["bar"], 3)
 
+    def test_add(self):
+        import termdoc
+
+        c = termdoc.HTDM()
+        c.add("1", ["foo", "bar", "bar", "baz"])
+        c.add("2", ["foo", "foo", "bar"])
+        self.assertEqual(c.get_counts()["foo"], 3)
+        self.assertEqual(c.get_counts("2")["foo"], 2)
+        self.assertEqual(c.get_counts("1")["bar"], 2)
+
 
 if __name__ == "__main__":
     unittest.main()

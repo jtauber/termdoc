@@ -42,6 +42,10 @@ class HTDM:
             address = self.address_sep.join(address.split(self.address_sep)[:-1])
             first = False
 
+    def add(self, address, term_list):
+        for term in term_list:
+            self.increment_count(address, term)
+
     def load(self, filename, field_sep="\t", address_sep=None, prefix=None):
         address_sep = address_sep or self.address_sep
         with open(filename) as f:

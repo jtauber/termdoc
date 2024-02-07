@@ -98,6 +98,23 @@ And here is an example with a two-level hierarchy:
 
 Note that if the `count` is `1` you can omit it.
 
+Entire lists of tokens can be added for a particular address in one go using `add(address, term_list)`:
+
+```python
+>>> import termdoc
+>>> c = termdoc.HTDM()
+>>> c.add("1.1", ["foo", "bar", "bar", "baz"])
+>>> c.add("1.2", ["foo", "foo"])
+>>> c.get_counts()["bar"]
+2
+>>> c.get_counts()["foo"]
+3
+>>> c.get_counts("1.2")["foo"]
+2
+
+```
+
+
 You can **prune** a HTDM to just `n` levels with the method `prune(n)`.
 
 You can iterate over the document-term counts at the leaves of the HTDM with the method `leaf_entries()` (this returns a generator yielding `(document_address, term, count)` tuples). This is effectively a traditional TDM (the document IDs will still reflect the hierarchy but the aggregate counts aren't present).
