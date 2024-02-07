@@ -254,7 +254,6 @@ class Test1(unittest.TestCase):
         self.assertEqual(c1.get_counts("1")["foo"], 5)
         self.assertEqual(c2.get_counts("1")["foo"], 7)
 
-
     def test_copy2(self):
         import termdoc
 
