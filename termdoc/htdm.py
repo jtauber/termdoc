@@ -1,5 +1,6 @@
 import collections
 from enum import Enum, auto
+from math import log10
 
 
 class Duplicates(Enum):
@@ -113,3 +114,7 @@ class HTDM:
         ]
         return sum(characteristic) / len(characteristic)
 
+    def tf_idf(self, term, address, prefix=""):
+        if not address.startswith(prefix):
+            raise ValueError(f"address '{address}' must start with prefix '{prefix}'")
+        return self.tf(term, address) * log10(1 / self.df(term, prefix, level=self.depth(address) - self.depth(prefix)))

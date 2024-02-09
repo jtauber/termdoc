@@ -399,6 +399,58 @@ class Test4(unittest.TestCase):
         self.assertEqual(c.df("bar", "2", level=1), 0.5)
         self.assertEqual(c.df("baz", "2", level=1), 0.5)
 
+    def test_simple_tf_idf(self):
+        import termdoc
+
+        c = termdoc.HTDM()
+        c.add("1.1", ["foo", "bar"])
+        c.add("1.2", ["bar"])
+        c.add("2.1", ["foo"])
+        c.add("2.2", ["foo", "bar", "baz"])
+
+        self.assertEqual(c.tf_idf("foo", "1.1"), 0.062469368304149966)
+        self.assertEqual(c.tf_idf("bar", "1.1"), 0.062469368304149966)
+        self.assertEqual(c.tf_idf("baz", "1.1"), 0.0)
+
+        self.assertEqual(c.tf_idf("foo", "1.2"), 0.0)
+        self.assertEqual(c.tf_idf("bar", "1.2"), 0.12493873660829993)
+        self.assertEqual(c.tf_idf("baz", "1.2"), 0.0)
+
+        self.assertEqual(c.tf_idf("foo", "2.1"), 0.12493873660829993)
+        self.assertEqual(c.tf_idf("bar", "2.1"), 0.0)
+        self.assertEqual(c.tf_idf("baz", "2.1"), 0.0)
+
+        self.assertEqual(c.tf_idf("foo", "2.2"), 0.041646245536099975)
+        self.assertEqual(c.tf_idf("bar", "2.2"), 0.041646245536099975)
+        self.assertEqual(c.tf_idf("baz", "2.2"), 0.20068666377598746)
+
+        self.assertEqual(c.tf_idf("foo", "1"), 0.0)
+        self.assertEqual(c.tf_idf("bar", "1"), 0.0)
+        self.assertEqual(c.tf_idf("baz", "1"), 0.0)
+
+        self.assertEqual(c.tf_idf("foo", "2"), 0.0)
+        self.assertEqual(c.tf_idf("bar", "2"), 0.0)
+        self.assertEqual(c.tf_idf("baz", "2"), 0.0752574989159953)
+
+    def test_hierarchical_tf_idf(self):
+        import termdoc
+
+        c = termdoc.HTDM()
+        c.add("1.1", ["foo", "bar"])
+        c.add("1.2", ["bar"])
+        c.add("2.1", ["foo"])
+        c.add("2.2", ["foo", "bar", "baz"])
+
+        self.assertEqual(c.tf_idf("foo", "1.1", "1"), 0.1505149978319906)
+        self.assertEqual(c.tf_idf("bar", "1.1", "1"), 0.0)
+        self.assertRaises(ZeroDivisionError, c.tf_idf, "baz", "1.1", "1")
+
+        self.assertEqual(c.tf_idf("foo", "1.2", "1"), 0.0)
+        self.assertEqual(c.tf_idf("bar", "1.2", "1"), 0.0)
+        self.assertRaises(ZeroDivisionError, c.tf_idf, "baz", "1.2", "1")
+
+        self.assertRaises(ValueError, c.tf_idf, "foo", "1.1", "2")
+
     def test_wikipedia(self):
         import termdoc
 
@@ -412,6 +464,10 @@ class Test4(unittest.TestCase):
         self.assertEqual(c.tf("example", "1"), 0)
         self.assertEqual(c.tf("example", "2"), 3/7)
         self.assertEqual(c.df("example"), 1/2)
+        self.assertEqual(c.tf_idf("this", "1"), 0)
+        self.assertEqual(c.tf_idf("this", "2"), 0)
+        self.assertEqual(c.tf_idf("example", "1"), 0)
+        self.assertEqual(c.tf_idf("example", "2"), 0.12901285528456335)
 
 
 if __name__ == "__main__":

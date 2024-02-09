@@ -191,6 +191,35 @@ Furthermore you can scope the calculate to a subtree, in this case just the docu
 ```
 This scoping can be combined with the level limit.
 
+The TF-IDF of a term and document can be calculated with `tf_idf(term, address)`:
+
+```python
+>>> c = termdoc.HTDM()
+>>> c.add("1", ["this", "is", "a", "a", "sample"])
+>>> c.add("2", ["this", "is", "another", "another", "example", "example", "example"])
+>>> c.tf_idf("example", "1")
+0.0
+>>> c.tf_idf("example", "2")
+0.12901285528456335
+
+```
+
+You can also scope the TF-IDF calculation to a subtree.
+
+```python
+>>> c = termdoc.HTDM()
+>>> c.add("1.1", ["foo", "bar"])
+>>> c.add("1.2", ["bar"])
+>>> c.add("2.1", ["foo"])
+>>> c.add("2.2", ["foo", "bar", "baz"])
+
+>>> c.tf_idf("foo", "1.1", "1")
+0.1505149978319906
+
+```
+
+Note that the address must start with the subtree prefix if the latter is given.
+
 
 ### Duplicates Policy
 
