@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="termdoc",
-    version="0.2",
+    version="0.3",
     description="Python library and tools for working with term-document matrices",
     url="http://github.com/jtauber/termdoc",
     author="James Tauber",
