@@ -149,6 +149,49 @@ You can get a term frequency with `tf(term)` or `tf(term, address)`.
 
 ```
 
+You can also get document frequency with `df(term)`.
+
+```python
+>>> c = termdoc.HTDM()
+>>> c.add("1.1", ["foo", "bar"])
+>>> c.add("1.2", ["bar"])
+>>> c.add("2.1", ["foo"])
+>>> c.add("2.2", ["foo", "bar", "baz"])
+>>> c.df("foo")
+0.75
+>>> c.df("bar")
+0.75
+>>> c.df("baz")
+0.25
+
+```
+
+By default this treats the leaves of the tree at the documents but you can instead specify an explicit number of levels to go down. For example this following will only tree the `1` and `2` as the documents (not `1.1`, `1.2`, `2.1`, `2.2`):
+
+```python
+>>> c.df("foo", level=1)
+1.0
+>>> c.df("bar", level=1)
+1.0
+>>> c.df("baz", level=1)
+0.5
+
+```
+
+Furthermore you can scope the calculate to a subtree, in this case just the documents `1.1` and `1.2` under `1`:
+
+```python
+>>> c.df("foo", "1")
+0.5
+>>> c.df("bar", "1")
+1.0
+>>> c.df("baz", "1")
+0.0
+
+```
+This scoping can be combined with the level limit.
+
+
 ### Duplicates Policy
 
 You can optionally pass in a `duplicates` setting to the constructor indicating the policy you want to follow if a term-document count is updated more than once.

@@ -359,6 +359,60 @@ class Test4(unittest.TestCase):
         self.assertEqual(c.tf("foo"), 0.5)
         self.assertEqual(c.tf("foo", "2"), 0.75)
 
+    def test_document_frequency(self):
+        import termdoc
+
+        c = termdoc.HTDM()
+        c.add("1.1", ["foo", "bar"])
+        c.add("1.2", ["bar"])
+        c.add("2.1", ["foo"])
+        c.add("2.2", ["foo", "bar", "baz"])
+
+        self.assertEqual(c.df("foo"), 0.75)
+        self.assertEqual(c.df("bar"), 0.75)
+        self.assertEqual(c.df("baz"), 0.25)
+        self.assertEqual(c.df("foo", level=1), 1)
+        self.assertEqual(c.df("bar", level=1), 1)
+        self.assertEqual(c.df("baz", level=1), 0.5)
+        self.assertEqual(c.df("foo", "1"), 0.5)
+        self.assertEqual(c.df("bar", "1"), 1)
+        self.assertEqual(c.df("baz", "1"), 0)
+        self.assertEqual(c.df("foo", "2"), 1)
+        self.assertEqual(c.df("bar", "2"), 0.5)
+        self.assertEqual(c.df("baz", "2"), 0.5)
+        self.assertEqual(c.df("foo", ""), 0.75)
+        self.assertEqual(c.df("bar", ""), 0.75)
+        self.assertEqual(c.df("baz", ""), 0.25)
+        self.assertEqual(c.df("foo", "", level=1), 1)
+        self.assertEqual(c.df("bar", "", level=1), 1)
+        self.assertEqual(c.df("baz", "", level=1), 0.5)
+        self.assertEqual(c.df("foo", level=2), 0.75)
+        self.assertEqual(c.df("bar", level=2), 0.75)
+        self.assertEqual(c.df("baz", level=2), 0.25)
+        self.assertEqual(c.df("foo", "", level=2), 0.75)
+        self.assertEqual(c.df("bar", "", level=2), 0.75)
+        self.assertEqual(c.df("baz", "", level=2), 0.25)
+        self.assertEqual(c.df("foo", "1", level=1), 0.5)
+        self.assertEqual(c.df("bar", "1", level=1), 1)
+        self.assertEqual(c.df("baz", "1", level=1), 0)
+        self.assertEqual(c.df("foo", "2", level=1), 1)
+        self.assertEqual(c.df("bar", "2", level=1), 0.5)
+        self.assertEqual(c.df("baz", "2", level=1), 0.5)
+
+    def test_wikipedia(self):
+        import termdoc
+
+        c = termdoc.HTDM()
+        c.add("1", ["this", "is", "a", "a", "sample"])
+        c.add("2", ["this", "is", "another", "another", "example", "example", "example"])
+
+        self.assertEqual(c.tf("this", "1"), 1/5)
+        self.assertEqual(c.tf("this", "2"), 1/7)
+        self.assertEqual(c.df("this"), 1)
+        self.assertEqual(c.tf("example", "1"), 0)
+        self.assertEqual(c.tf("example", "2"), 3/7)
+        self.assertEqual(c.df("example"), 1/2)
+
 
 if __name__ == "__main__":
     unittest.main()

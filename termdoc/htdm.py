@@ -100,3 +100,16 @@ class HTDM:
 
     def tf(self, term, address=""):
         return self.get_counts(address)[term] / self.get_counts(address).total()
+
+    def df(self, term, prefix="", level=None):
+        if level:
+            leaves = self.counters[self.depth(prefix) + level]
+        else:
+            leaves = self.leaves()
+        characteristic = [
+            1 if term in counter else 0
+            for document, counter in leaves.items()
+            if document.startswith(prefix)
+        ]
+        return sum(characteristic) / len(characteristic)
+
