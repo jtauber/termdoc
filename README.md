@@ -2,9 +2,7 @@
 
 *Python library and tools for working with term-document matrices*
 
-This project is just beginning, but a useful data structure, HTDM (hierarchical term-document matrix), is already available.
-
-Various calculations on TDMs will soon be implemented, including TF-IDF.
+This project is just beginning, but a useful data structure, HTDM (hierarchical term-document matrix), is already available and TF-IDF calculations can be performed.
 
 I am also interested in standardizing the exchange format for HTDMs.
 
