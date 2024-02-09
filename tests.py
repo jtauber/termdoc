@@ -456,14 +456,16 @@ class Test4(unittest.TestCase):
 
         c = termdoc.HTDM()
         c.add("1", ["this", "is", "a", "a", "sample"])
-        c.add("2", ["this", "is", "another", "another", "example", "example", "example"])
+        c.add(
+            "2", ["this", "is", "another", "another", "example", "example", "example"]
+        )
 
-        self.assertEqual(c.tf("this", "1"), 1/5)
-        self.assertEqual(c.tf("this", "2"), 1/7)
+        self.assertEqual(c.tf("this", "1"), 1 / 5)
+        self.assertEqual(c.tf("this", "2"), 1 / 7)
         self.assertEqual(c.df("this"), 1)
         self.assertEqual(c.tf("example", "1"), 0)
-        self.assertEqual(c.tf("example", "2"), 3/7)
-        self.assertEqual(c.df("example"), 1/2)
+        self.assertEqual(c.tf("example", "2"), 3 / 7)
+        self.assertEqual(c.df("example"), 1 / 2)
         self.assertEqual(c.tf_idf("this", "1"), 0)
         self.assertEqual(c.tf_idf("this", "2"), 0)
         self.assertEqual(c.tf_idf("example", "1"), 0)

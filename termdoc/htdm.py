@@ -117,4 +117,6 @@ class HTDM:
     def tf_idf(self, term, address, prefix=""):
         if not address.startswith(prefix):
             raise ValueError(f"address '{address}' must start with prefix '{prefix}'")
-        return self.tf(term, address) * log10(1 / self.df(term, prefix, level=self.depth(address) - self.depth(prefix)))
+        return self.tf(term, address) * log10(
+            1 / self.df(term, prefix, level=self.depth(address) - self.depth(prefix))
+        )
